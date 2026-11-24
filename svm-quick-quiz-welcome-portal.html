@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#102b46" />
+  <meta name="description" content="SVM Quick Quiz — the digital quiz portal of Saraswati Vidya Mandir Senior Secondary School, Aligarh." />
+  <title>SVM Quick Quiz | Student Welcome Portal</title>
+  <style>
+    :root {
+      --navy: #102b46;
+      --navy-2: #173d5c;
+      --teal: #168b83;
+      --teal-dark: #08766f;
+      --gold: #f2bd58;
+      --ink: #183247;
+      --muted: #647789;
+      --paper: #f5f8fa;
+      --white: #fff;
+      --line: rgba(16,43,70,.10);
+      --shadow: 0 22px 60px rgba(16,43,70,.12);
+      --radius: 24px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    button { font: inherit; }
+    .shell { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+    .topbar {
+      background: var(--navy);
+      color: #eaf3f8;
+      font-size: 12px;
+      letter-spacing: .035em;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 60px;
+      display: grid;
+      /* justify-content: contain; */
+      place-items: center;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #003f36, #00664d);
+      color: white;
+      font-size: 22px;
+      box-shadow: 0 5px 14px #173d7035;
+    }
+
+    .brand-icon > img{
+      width: 30px;
+      height: 50px;
+    }
+
+    .topbar-inner { min-height: 38px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .topbar-label { display:flex; align-items:center; gap:9px; }
+    .live-dot { width:7px; height:7px; border-radius:50%; background:#62d5b4; box-shadow:0 0 0 4px rgba(98,213,180,.13); }
+    header { background:rgba(255,255,255,.94); border-bottom:1px solid var(--line); position:relative; z-index:5; }
+    .nav { min-height:82px; display:flex; align-items:center; justify-content:space-between; gap:22px; }
+    .brand { display:flex; align-items:center; gap:13px; text-decoration:none; min-width:0; }
+    .brand-mark {
+      width:48px; height:48px; border-radius:15px; display:grid; place-items:center;
+      color:white; background:linear-gradient(145deg,var(--teal),var(--navy-2));
+      box-shadow:0 8px 20px rgba(22,139,131,.22); flex:none;
+    }
+    .brand-mark svg { width:27px; height:27px; }
+    .brand-copy { min-width:0; }
+    .brand-name { display:block; font-size:16px; font-weight:800; letter-spacing:.015em; color:var(--navy); line-height:1.25; }
+    .brand-sub { display:block; font-size:11px; color:var(--muted); margin-top:3px; }
+    .nav-links { display:flex; align-items:center; gap:27px; }
+    .nav-links a { text-decoration:none; color:#53697b; font-size:13px; font-weight:650; transition:color .2s; }
+    .nav-links a:hover { color:var(--teal-dark); }
+    .nav-cta {
+      border:0; text-decoration:none; border-radius:999px; padding:11px 18px; color:white;
+      background:var(--teal); font-size:13px; font-weight:750; box-shadow:0 7px 17px rgba(22,139,131,.18);
+      transition:transform .2s, background .2s;
+    }
+    .nav-cta:hover { background:var(--teal-dark); transform:translateY(-1px); }
+    .hero {
+      position:relative; overflow:hidden; padding:76px 0 68px;
+      background:
+        radial-gradient(circle at 82% 16%, rgba(242,189,88,.20), transparent 23%),
+        radial-gradient(circle at 8% 92%, rgba(22,139,131,.22), transparent 27%),
+        linear-gradient(120deg,#102b46 0%,#173d5c 62%,#155b62 100%);
+      color:white;
+    }
+    .hero::before, .hero::after { content:""; position:absolute; border:1px solid rgba(255,255,255,.09); border-radius:50%; pointer-events:none; }
+    .hero::before { width:510px; height:510px; right:-190px; top:-255px; }
+    .hero::after { width:370px; height:370px; right:-120px; top:-185px; }
+    .hero-grid { display:grid; grid-template-columns:1.15fr .85fr; align-items:center; gap:58px; position:relative; z-index:1; }
+    .eyebrow { display:inline-flex; align-items:center; gap:9px; color:#bde9df; font-size:11px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
+    .eyebrow::before { content:""; width:24px; height:2px; background:var(--gold); border-radius:2px; }
+    h1 { margin:18px 0 17px; max-width:650px; font-size:clamp(38px,5.5vw,66px); line-height:1.04; letter-spacing:-.045em; font-weight:850; }
+    h1 span { color:#8ee0cf; }
+    .hero-copy { max-width:570px; color:rgba(239,247,250,.78); font-size:16px; line-height:1.8; margin:0; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:13px; margin-top:30px; }
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:10px; min-height:51px; padding:0 22px;
+      border-radius:13px; text-decoration:none; font-size:14px; font-weight:800; border:1px solid transparent;
+      transition:transform .2s, box-shadow .2s, background .2s;
+    }
+    .btn:hover { transform:translateY(-2px); }
+    .btn-primary { background:var(--gold); color:#24364a; box-shadow:0 12px 26px rgba(0,0,0,.16); }
+    .btn-primary:hover { background:#ffd17a; box-shadow:0 15px 30px rgba(0,0,0,.2); }
+    .btn-secondary { border-color:rgba(255,255,255,.25); color:white; background:rgba(255,255,255,.07); }
+    .btn-secondary:hover { background:rgba(255,255,255,.13); }
+    .btn svg { width:17px; height:17px; }
+    .hero-note { display:flex; align-items:center; gap:9px; margin-top:22px; color:rgba(234,243,248,.66); font-size:12px; }
+    .hero-note svg { width:15px; height:15px; color:#8ee0cf; flex:none; }
+    .portal-card {
+      position:relative; max-width:390px; margin-left:auto; width:100%; padding:24px;
+      background:rgba(255,255,255,.97); color:var(--ink); border:1px solid rgba(255,255,255,.6);
+      border-radius:25px; box-shadow:0 28px 70px rgba(0,0,0,.22); transform:rotate(1.3deg);
+    }
+    .portal-card-top { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    .mini-label { color:#718395; font-size:10px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; }
+    .status { display:inline-flex; align-items:center; gap:6px; padding:6px 9px; border-radius:99px; color:#08766f; background:#e5f6f1; font-size:10px; font-weight:800; }
+    .status::before { content:""; width:6px; height:6px; background:#1ba88d; border-radius:50%; }
+    .card-illustration { margin:24px 0 18px; min-height:150px; border-radius:18px; display:grid; place-items:center; overflow:hidden; background:linear-gradient(135deg,#e4f5f1,#edf3fa); position:relative; }
+    .card-illustration::before,.card-illustration::after { content:""; position:absolute; border-radius:50%; border:1px solid rgba(22,139,131,.14); }
+    .card-illustration::before { width:210px;height:210px; }
+    .card-illustration::after { width:155px;height:155px; }
+    .book-art { position:relative; z-index:1; width:126px; height:104px; }
+    .portal-card h2 { margin:0; color:var(--navy); font-size:20px; letter-spacing:-.02em; }
+    .portal-card p { margin:7px 0 0; color:#718092; font-size:12px; line-height:1.6; }
+    .card-stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:20px; }
+    .stat { background:#f4f7f9; border-radius:12px; padding:11px 12px; }
+    .stat strong { display:block; color:var(--navy); font-size:15px; }
+    .stat span { display:block; color:#7a8b9a; font-size:10px; margin-top:2px; }
+    .float-chip { position:absolute; right:-18px; bottom:48px; padding:12px 15px; border-radius:13px; background:white; color:var(--navy); box-shadow:0 12px 30px rgba(0,0,0,.16); font-size:11px; font-weight:800; transform:rotate(-4deg); }
+    .float-chip span { color:var(--teal); margin-right:5px; }
+    .trust-strip { background:white; border-bottom:1px solid var(--line); }
+    .trust-inner { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:13px 38px; min-height:66px; color:#627789; font-size:12px; font-weight:650; }
+    .trust-item { display:flex; align-items:center; gap:8px; }
+    .trust-item svg { width:16px; height:16px; color:var(--teal); }
+    section.content-section { padding:76px 0; }
+    .section-heading { text-align:center; max-width:650px; margin:0 auto 36px; }
+    .section-kicker { color:var(--teal-dark); font-size:10px; font-weight:850; letter-spacing:.16em; text-transform:uppercase; }
+    .section-heading h2 { color:var(--navy); font-size:clamp(27px,3.5vw,38px); line-height:1.15; letter-spacing:-.035em; margin:11px 0 10px; }
+    .section-heading p { margin:0; color:var(--muted); font-size:14px; }
+    .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+    .step-card { padding:25px; border:1px solid var(--line); border-radius:19px; background:white; box-shadow:0 8px 25px rgba(16,43,70,.035); }
+    .step-number { display:grid; place-items:center; width:38px; height:38px; border-radius:12px; background:#e7f5f2; color:var(--teal-dark); font-size:13px; font-weight:850; }
+    .step-card h3 { margin:18px 0 7px; color:var(--navy); font-size:16px; }
+    .step-card p { margin:0; color:var(--muted); font-size:13px; line-height:1.7; }
+    .step-icon { float:right; color:#8ba2b1; }
+    .step-icon svg { width:21px; height:21px; }
+    .lower-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:20px; }
+    .fact-card,.notice-card { border-radius:22px; padding:27px; min-height:225px; }
+    .fact-card { background:linear-gradient(135deg,#e7f5f1,#f1f7fa); border:1px solid rgba(22,139,131,.12); }
+    .notice-card { background:white; border:1px solid var(--line); }
+    .panel-top { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .panel-tag { color:var(--teal-dark); font-size:10px; font-weight:850; letter-spacing:.13em; text-transform:uppercase; }
+    .panel-icon { display:grid; place-items:center; width:36px; height:36px; border-radius:11px; color:var(--teal-dark); background:rgba(255,255,255,.7); }
+    .panel-icon svg { width:18px; height:18px; }
+    .fact-text { color:var(--navy); font-family:Georgia,serif; font-size:clamp(19px,2.5vw,25px); line-height:1.45; margin:24px 0 15px; }
+    .fact-controls { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .fact-count { color:#718596; font-size:11px; }
+    .text-button { border:0; background:transparent; color:var(--teal-dark); font-size:12px; font-weight:800; cursor:pointer; padding:7px 0; }
+    .text-button:hover { text-decoration:underline; }
+    .notice-empty { margin-top:26px; padding:16px; border-radius:13px; background:#f6f8fa; color:#728395; font-size:13px; }
+    .notice-empty strong { display:block; color:var(--navy); font-size:13px; margin-bottom:4px; }
+    .final-cta { padding:0 0 76px; }
+    .final-panel { display:flex; align-items:center; justify-content:space-between; gap:25px; padding:31px 35px; border-radius:22px; color:white; background:linear-gradient(110deg,#153651,#126e70); }
+    .final-panel h2 { margin:0 0 6px; font-size:23px; letter-spacing:-.025em; }
+    .final-panel p { margin:0; color:rgba(255,255,255,.72); font-size:13px; }
+    .final-panel .btn { flex:none; }
+    footer { background:#0c2238; color:#d5e0e8; padding:28px 0; }
+    .footer-inner { display:flex; justify-content:space-between; align-items:center; gap:20px; }
+    .footer-school { font-size:12px; font-weight:750; }
+    .footer-meta { color:#8fa3b3; font-size:11px; margin-top:4px; }
+    .footer-right { color:#8fa3b3; font-size:11px; text-align:right; }
+    .toast { position:fixed; left:50%; bottom:22px; transform:translate(-50%,20px); opacity:0; pointer-events:none; z-index:20; padding:11px 16px; border-radius:11px; background:#173d5c; color:white; font-size:12px; box-shadow:var(--shadow); transition:opacity .2s,transform .2s; }
+    .toast.show { opacity:1; transform:translate(-50%,0); }
+    @media (max-width:850px) {
+      .hero-grid { grid-template-columns:1fr .8fr; gap:30px; }
+      .portal-card { padding:19px; }
+      .nav-links { gap:16px; }
+    }
+    @media (max-width:680px) {
+      .shell { width:min(100% - 30px,560px); }
+      .topbar-inner { justify-content:center; text-align:center; }
+      .topbar-extra,.nav-links { display:none; }
+      .nav { min-height:70px; }
+      .brand-mark { width:42px;height:42px;border-radius:13px; }
+      .brand-name { font-size:13px; }
+      .brand-sub { font-size:10px; }
+      .nav-cta { padding:10px 13px; font-size:11px; }
+      .hero { padding:54px 0 49px; }
+      .hero-grid { grid-template-columns:1fr; gap:35px; }
+      h1 { font-size:clamp(39px,12vw,57px); }
+      .hero-copy { font-size:14px; }
+      .portal-card { max-width:370px; margin:0 auto; transform:none; }
+      .float-chip { right:-7px; bottom:38px; }
+      .trust-inner { justify-content:flex-start; gap:13px 20px; padding:17px 0; }
+      .trust-item { font-size:11px; }
+      section.content-section { padding:58px 0; }
+      .steps { grid-template-columns:1fr; gap:12px; }
+      .step-card { padding:20px; }
+      .step-card h3 { margin-top:12px; }
+      .lower-grid { grid-template-columns:1fr; }
+      .fact-card,.notice-card { min-height:0; padding:23px; }
+      .final-cta { padding-bottom:55px; }
+      .final-panel { align-items:flex-start; flex-direction:column; padding:25px; }
+      .final-panel .btn { width:100%; }
+      .footer-inner { align-items:flex-start; flex-direction:column; }
+      .footer-right { text-align:left; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *,*::before,*::after { scroll-behavior:auto !important; transition:none !important; animation:none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="shell topbar-inner">
+      <div class="topbar-label"><span class="live-dot"></span> Digital learning and assessment portal</div>
+      <div class="topbar-extra">Gonda Mod, Khair Road, Aligarh, Uttar Pradesh - 202001</div>
+    </div>
+  </div>
+
+  <header>
+    <nav class="shell nav" aria-label="Main navigation">
+      <a class="brand" href="#" aria-label="SVM Quick Quiz home">
+      <span class="brand-icon"><img src="https://www.nicepng.com/png/full/254-2549948_saraswati-logo-png.png" alt="Vidya-bharti-logo"></span>
+
+        <span class="brand-copy">
+          <span class="brand-name">SVM QUICK QUIZ</span>
+          <span class="brand-sub">Saraswati Vidya Mandir Senior Secondary School</span>
+        </span>
+      </a>
+      <div class="nav-links">
+        <a href="#how-it-works">How to participate</a>
+        <a href="#student-corner">Student corner</a>
+      </div>
+      <a class="nav-cta" data-quiz-link href="#" rel="noopener">Open Quiz <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <div class="eyebrow">Learn · Think · Achieve</div>
+          <h1>Your next challenge<br />starts <span>here.</span></h1>
+          <p class="hero-copy">Welcome to the SVM Quick Quiz portal. Get ready to test your knowledge, think clearly, and discover how much you know. Your next learning challenge is just one click away.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" data-quiz-link href="#" rel="noopener">
+              Start Quiz
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="btn btn-secondary" href="#how-it-works">How it works</a>
+          </div>
+          <div class="hero-note">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 5 6v5c0 4.6 2.9 8.1 7 10 4.1-1.9 7-5.4 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.7"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Use the quiz access details provided by your teacher.
+          </div>
+        </div>
+
+        <div class="portal-card" aria-label="SVM Quick Quiz portal information">
+          <div class="portal-card-top">
+            <span class="mini-label">Your learning space</span>
+            <span class="status">Portal ready</span>
+          </div>
+          <div class="card-illustration" aria-hidden="true">
+            <svg class="book-art" viewBox="0 0 140 112" fill="none">
+              <path d="M15 28c20-8 38-4 55 8v59c-17-12-35-16-55-8V28Z" fill="#fff" stroke="#168b83" stroke-width="2.4" stroke-linejoin="round"/>
+              <path d="M125 28c-20-8-38-4-55 8v59c17-12 35-16 55-8V28Z" fill="#fff" stroke="#168b83" stroke-width="2.4" stroke-linejoin="round"/>
+              <path d="M70 36v59" stroke="#168b83" stroke-width="2"/>
+              <path d="M26 43c10-3 20-2 29 3M26 55c10-3 20-2 29 3M85 46c9-5 19-6 29-3M85 58c9-5 19-6 29-3" stroke="#b2c9d1" stroke-width="2" stroke-linecap="round"/>
+              <path d="m70 8 4.2 8.5 9.4 1.4-6.8 6.6 1.6 9.3-8.4-4.4-8.4 4.4 1.6-9.3-6.8-6.6 9.4-1.4L70 8Z" fill="#f2bd58"/>
+              <path d="M13 99c21-8 40-4 57 8 17-12 36-16 57-8" stroke="#168b83" stroke-width="2.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h2>Ready when you are.</h2>
+          <p>Enter your quiz, follow the instructions, and give every question your best thought.</p>
+          <div class="card-stats">
+            <div class="stat"><strong>Think</strong><span>Read each question carefully</span></div>
+            <div class="stat"><strong>Attempt</strong><span>Answer with confidence</span></div>
+          </div>
+          <div class="float-chip"><span>✦</span> Every question is a chance to learn</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="trust-strip">
+      <div class="shell trust-inner">
+        <div class="trust-item"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v14H4zM8 9h8M8 13h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> School learning portal</div>
+        <div class="trust-item"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.6 2.9 8.1 7 10 4.1-1.9 7-5.4 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.7"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> Teacher-guided assessments</div>
+        <div class="trust-item"><svg viewBox="0 0 24 24" fill="none"><path d="M4 18V6m0 12h16M8 15l3-4 3 2 5-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg> Practice and progress</div>
+      </div>
+    </div>
+
+    <section class="content-section" id="how-it-works">
+      <div class="shell">
+        <div class="section-heading">
+          <div class="section-kicker">Simple steps</div>
+          <h2>How to participate</h2>
+          <p>Follow these steps whenever your teacher asks you to join a quiz.</p>
+        </div>
+        <div class="steps">
+          <article class="step-card">
+            <span class="step-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M5 4h14v16H5zM8 8h8M8 12h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
+            <div class="step-number">01</div>
+            <h3>Open the quiz</h3>
+            <p>Click the <strong>Start Quiz</strong> button and wait for the quiz application to load.</p>
+          </article>
+          <article class="step-card">
+            <span class="step-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4 20c.8-3.2 3.5-5 8-5s7.2 1.8 8 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
+            <div class="step-number">02</div>
+            <h3>Enter your details</h3>
+            <p>Follow your teacher's instructions and enter the required student and quiz information carefully.</p>
+          </article>
+          <article class="step-card">
+            <span class="step-icon"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div class="step-number">03</div>
+            <h3>Attempt the quiz</h3>
+            <p>Read each question, select your answer, and submit your attempt according to the instructions.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="student-corner" style="padding-top:0">
+      <div class="shell">
+        <div class="section-heading">
+          <div class="section-kicker">A little extra learning</div>
+          <h2>Student corner</h2>
+          <p>Stay curious. A small fact can lead to a big question.</p>
+        </div>
+        <div class="lower-grid">
+          <article class="fact-card">
+            <div class="panel-top">
+              <span class="panel-tag">Did you know?</span>
+              <span class="panel-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M9 18h6M10 21h4M8.5 14.5a6 6 0 1 1 7 0c-.8.6-1.2 1.4-1.3 2.5h-4.4c-.1-1.1-.5-1.9-1.3-2.5Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+            <p class="fact-text" id="factText" aria-live="polite">Octopuses have three hearts: two help move blood to the gills, and one pumps it to the rest of the body.</p>
+            <div class="fact-controls">
+              <span class="fact-count" id="factCount">Fact 1 of 5</span>
+              <button class="text-button" id="nextFact" type="button">Read another fact ↗</button>
+            </div>
+          </article>
+          <article class="notice-card">
+            <div class="panel-top">
+              <span class="panel-tag">Student noticeboard</span>
+              <span class="panel-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+            <div class="notice-empty">
+              <strong>Stay tuned for updates.</strong>
+              Your teacher will share quiz schedules, access instructions, and important announcements here.
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <div class="shell">
+        <div class="final-panel">
+          <div>
+            <h2>Ready to begin your quiz?</h2>
+            <p>Open the quiz platform and follow the instructions shared by your teacher.</p>
+          </div>
+          <a class="btn btn-primary" data-quiz-link href="#" rel="noopener">Enter SVM Quick Quiz <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <div>
+        <div class="footer-school">Saraswati Vidya Mandir Senior Secondary School</div>
+        <div class="footer-meta">Gonda Mod, Khair Road, Aligarh, Uttar Pradesh - 202001</div>
+      </div>
+      <div class="footer-right">SVM Quick Quiz · Student Welcome Portal<br />A school learning initiative</div>
+    </div>
+  </footer>
+  <div class="toast" id="configToast" role="status">The quiz link has not been configured yet.</div>
+
+  <script>
+    /*
+      IMPORTANT:
+      Replace the placeholder below with the production Google Apps Script
+      Web App URL ending in /exec before publishing this page on GitHub Pages.
+    */
+    const QUIZ_APP_URL = "https://script.google.com/macros/s/AKfycbw058wf5VWsppPKGhfLgs_i_0QczOd4EMoK8xCSATgd0-UJn0GZmmYdGNlCeftOG9d3/exec";
+
+    document.querySelectorAll("[data-quiz-link]").forEach((link) => {
+      link.href = QUIZ_APP_URL;
+      link.addEventListener("click", (event) => {
+        if (!QUIZ_APP_URL.startsWith("https://") ||
+            !QUIZ_APP_URL.includes("script.google.com/macros/s/") ||
+            !QUIZ_APP_URL.endsWith("/exec")) {
+          event.preventDefault();
+          const toast = document.getElementById("configToast");
+          toast.classList.add("show");
+          window.setTimeout(() => toast.classList.remove("show"), 2600);
+        }
+      });
+    });
+
+    const facts = [
+      "Octopuses have three hearts: two help move blood to the gills, and one pumps it to the rest of the body.",
+      "The human brain contains roughly 86 billion neurons that communicate through complex networks.",
+      "A day on Venus is longer than a year on Venus because it rotates very slowly on its axis.",
+      "Honey can remain edible for a very long time when it is properly sealed and stored.",
+      "The blue whale is the largest animal known to have ever lived on Earth."
+    ];
+    let factIndex = 0;
+    const factText = document.getElementById("factText");
+    const factCount = document.getElementById("factCount");
+    document.getElementById("nextFact").addEventListener("click", () => {
+      factIndex = (factIndex + 1) % facts.length;
+      factText.style.opacity = "0";
+      window.setTimeout(() => {
+        factText.textContent = facts[factIndex];
+        factCount.textContent = `Fact ${factIndex + 1} of ${facts.length}`;
+        factText.style.opacity = "1";
+      }, 150);
+    });
+    factText.style.transition = "opacity .15s ease";
+  </script>
+</body>
+</html>
